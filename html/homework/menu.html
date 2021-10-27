@@ -1,174 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .cd-dropdown {
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transform: translateY(-100%);
-        transition: transform 0.5s;
-        }
-        .cd-dropdown.dropdown-is-active {
-        transform: translateY(0);
-        }
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <style>
+      @import url(https://use.fontawesome.com/releases/v5.0.6/css/all.css);
+      @import url(https://fonts.googleapis.com/css?family=Oswald:400|Raleway:400,700,400italic,700italic);
 
-        .cd-dropdown-content.is-hidden, .cd-dropdown-content ul.is-hidden {
-  /* push the secondary dropdown items to the right */
-  transform: translateX(100%);
-}
+      *,
+      *:before,
+      *:after {
+         box-sizing: border-box;
+      }
 
-.cd-dropdown-content.move-out > li > a, .cd-dropdown-content ul.move-out > li > a {
-  /* push the dropdown items to the left when secondary dropdown slides in */
-  transform: translateX(-100%);
-}
+      html,
+      body {
+         height: 100%;
+         margin: 0;
+         padding: 0;
+      }
+
+      body {
+         background-color: #1d1f20;
+         color: #e5e5e5;
+         font: 16px/1.25 'Raleway', sans-serif;
+      }
+
+      h1 {
+         font-family: 'Oswald', sans-serif;
+         text-align: center;
+      }
+
+      a {
+         color: #a2ed56;
+      }
+
+      a:hover {
+         color: #83e4e2;
+         text-decoration: none;
+      }
+
+      .container {
+         margin: 0 auto;
+         max-width: 80em;
+      }
+
+      main .container {
+         padding: 1em;
+      }
+
+      p {
+         margin-left: auto;
+         margin-right: auto;
+         max-width: 40em;
+      }
+
+      .screen-reader-text {
+         clip: rect(1px 1px 1px 1px);
+         clip: rect(1px, 1px, 1px, 1px);
+         height: 1px;
+         overflow: hidden;
+         position: absolute !important;
+         width: 1px;
+      }
+      nav {
+         background: #e5e5e5;
+         color: #1d1f20;
+         left: 0;
+         position: relative;
+         top: 0;
+         width: 100%;
+         z-index: 9999;
+      }
+
+      /*** INPUT ***/
+      nav input {
+         opacity: 0;
+         position: absolute;
+         z-index: -1;
+      }
+
+      /*** LABEL ***/
+      nav label {
+         cursor: pointer;
+         display: block;
+         font: 2em/1 'Oswald', sans-serif;
+         padding: 0.5em;
+      }
+
+      /* Hamburger Icon */
+      #menu-icon,
+      #menu-icon:before,
+      #menu-icon:after {
+         background: #1d1f20;
+         border-radius: 0.05em;
+         height: 0.2em;
+         transition: all 0.2s ease-in-out;
+         width: 100%;
+      }
+
+      #menu-icon {
+         display: inline-block;
+         margin: 0.4em 0;
+         max-width: 1em;
+         position: relative;
+      }
+
+      nav label #menu-icon {
+         float: right;
+      }
+
+      #menu-icon:before,
+      #menu-icon:after {
+         content: '';
+         left: 0;
+         position: absolute;
+      }
+
+      #menu-icon:before {
+         top: -0.4em;
+      }
+
+      #menu-icon:after {
+         bottom: -0.4em;
+      }
+
+      /* Close Icon */
+      nav input[type=checkbox]:checked + label #menu-icon {
+         background: transparent;
+      }
+
+      nav input[type=checkbox]:checked + label #menu-icon:before {
+         top: 0;
+         transform: rotate(-45deg);
+      }
+
+      nav input[type=checkbox]:checked + label #menu-icon:after {
+         bottom: 0;
+         transform: rotate(45deg);
+      }
 
 
-@media only screen and (min-width: 1024px) {
-  .cd-dropdown {
-    position: absolute;
-    top: 100%;
-    /* reset style*/
-    height: auto;
-    width: auto;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(30px);
-    transition: opacity 0.3s 0s, visibility 0s 0.3s, transform 0.3s 0s;
-  }
-  .cd-dropdown.dropdown-is-active {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s 0s, visibility 0.3s 0s, transform 0.3s 0s;
-  }
+      /*** MENU ***/
+      /* Overlay */
+      nav input:checked ~ #overlay {
+         background: #e5e5e5;
+         bottom: 0;
+         left: 0;
+         height: 100vh;
+         position: fixed;
+         right: 0;
+         top: 0;
+         width: 100vw;
+         z-index: -1;
+      }
 
-  .cd-dropdown-content {
-    /* reset mobile style */
-    position: static;
-    height: auto;
-    width: 280px;
-  }
-  .cd-dropdown-content .cd-secondary-dropdown, .cd-dropdown-content .cd-dropdown-gallery, .cd-dropdown-content .cd-dropdown-icons {
-    transform: translateX(0);
-    left: 100%;
-    height: auto;
-  }
-  .cd-dropdown-content .cd-secondary-dropdown.is-hidden, .cd-dropdown-content .cd-dropdown-gallery.is-hidden, .cd-dropdown-content .cd-dropdown-icons.is-hidden {
-    /* reset mobile style */
-    transform: translateX(0);
-  }
-  .cd-dropdown-content > .has-children > ul {
-    visibility: hidden;
-  }
-  .cd-dropdown-content > .has-children:hover > ul {
-    /* when hover over .cd-dropdown-content items - show subnavigation */
-    visibility: visible;
-  }
-  .cd-dropdown-content > .has-children:hover > .cd-secondary-dropdown > li > ul {
-    /* if .cd-secondary-dropdown is visible - show also subnavigation */
-    visibility: visible;
-  }
-}
+      /* List */
+      nav ul {
+         font-size: 1.5em;
+         list-style: none;
+         margin: 0;
+         max-height: 0;
+         opacity: 0;
+         overflow: hidden;
+         padding: 0;
+         text-align: center;
+      }
 
+      nav input:checked ~ ul {
+         margin: 1em;
+         max-height: inherit;
+         opacity: 1;
+      }
 
+      nav ul > li {
+         margin: 0.5em 0;
+      }
+
+      nav ul a {
+         color: #1d1f20!important;
+         text-decoration: none;
+      }
+
+      nav ul a:hover {
+         text-decoration: underline;
+      }
+
+      /* Social Media */
+      nav ul#social-media > li {
+         display: inline-block;
+         font-size: 1.5em;
+         margin: 0.5em;
+      }
     </style>
     <title>Menu</title>
 </head>
 <body>
-    <header>
-   <div class="cd-dropdown-wrapper">
-      <a class="cd-dropdown-trigger" href="#0">Dropdown</a>
-      <nav class="cd-dropdown">
-         <h2>Title</h2>
-         <a href="#0" class="cd-close">Close</a>
-         <ul class="cd-dropdown-content">
-            <li>
-               <form class="cd-search">
-                  <input type="search" placeholder="Search...">
-               </form>
-            </li>
-
-            <li class="has-children">
-               <a href="#0">Clothing</a>
-               <ul class="cd-secondary-dropdown is-hidden">
-                  <li class="go-back"><a href="#0">Menu</a></li>
-                  <li class="see-all"><a href="#0">All Clothing</a></li>
-                  <li class="has-children">
-                     <a href="#0">Accessories</a>
-
-                     <ul class="is-hidden">
-                        <li class="go-back"><a href="#0">Clothing</a></li>
-                        <li class="see-all"><a href="#0">All Accessories</a></li>
-                        <li class="has-children">
-                           <a href="#0">Beanies</a>
-                           <ul class="is-hidden">
-                              <li class="go-back"><a href="#0">Accessories</a></li>
-                              <li class="see-all"><a href="#0">All Benies</a></li>
-                              <li><a href="#0">Caps &amp; Hats</a></li>
-                              <!-- other list items here -->
-                           </ul>
-                        </li>
-                        <li class="has-children">
-                           <a href="#0">Caps &amp; Hats</a>
-                           <ul class="is-hidden">
-                              <li class="go-back"><a href="#0">Accessories</a></li>
-                              <li class="see-all"><a href="#0">All Caps &amp; Hats</a></li>
-                              <li><a href="#0">Beanies</a></li>
-                              <!-- other list items here -->
-                           </ul>
-                        </li>
-                        <li><a href="#0">Glasses</a></li>
-                        <!-- other list items here -->
-                     </ul>
-                  </li>
-
-                  <li class="has-children">
-                     <!-- other list items here -->
-                  </li>
-
-                  <li class="has-children">
-                     <!-- other list items here -->
-                  </li>
-
-                  <li class="has-children">
-                     <!-- other list items here -->
-                  </li>
-               </ul> <!-- .cd-secondary-dropdown -->
-            </li> <!-- .has-children -->
-
-            <li class="has-children">
-               <!-- other list items here -->
-            </li> <!-- .has-children -->
-
-            <li class="has-children">
-               <!-- other list items here -->
-            </li> <!-- .has-children -->
-
-            <li class="cd-divider">Divider</li>
-
-            <li><a href="#0">Page 1</a></li>
-            <!-- other list items here -->
-
-         </ul> <!-- .cd-dropdown-content -->
-      </nav> <!-- .cd-dropdown -->
-   </div> <!-- .cd-dropdown-wrapper -->
-</header>
-
-
-<main class="cd-main-content">
-   <!-- your content here -->
-   <h1>Hello and welcome to the menu page</h1>
-
-</main>
-
-
-
+   <nav>
+      <div class="container">
+          <input id="responsive-menu" type="checkbox">
+          <label for="responsive-menu">Menu <span id="menu-icon"></span></label>
+          <div id="overlay"></div>
+          <ul>
+              <li><a href="http://art.yale.edu/">Yale University School of Art</a></li>
+              <li><a href="http://www.suzannecollinsbooks.com/">Suzanne Collins</a></li>
+              <li><a href="http://www.arrestling.com/index.htm">Gulla’s Arrestling</a></li>
+              <li><a href="http://www.roverp6cars.com/">MGBD Parts &amp; Services</a></li>
+              <li><a href="http://www.irishwrecksonline.net/">Irish Shipwrecks Online</a></li>
+              <li><a href="http://www.arngren.net/">Arngren</a></li>
+              <li><a href="https://www.lingscars.com/">Ling's Cars</a></li>
+              <li><a href="http://www.007museum.com/">JAMES BOND 007 MUSEUM</a></li>
+              <li><a href="http://www.dokimos.org/ajff/">ACCEPT JESUS, FOREVER FORGIVEN!</a></li>
+              <li><a href="http://ronoslund.com/">Ron Oslund's Home Page</a></li>
+          </ul>
+          <ul id="social-media">
+              <li>
+                  <a href="https://dribbble.com/erinesullivan">
+                      <i class="fab fa-dribbble"></i>
+                      <span class="screen-reader-text">Dribbble</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="http://codepen.io/erinesullivan/">
+                      <i class="fab fa-codepen"></i>
+                      <span class="screen-reader-text">CodePen</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="https://twitter.com/erin_e_sullivan">
+                      <i class="fab fa-twitter"></i>
+                      <span class="screen-reader-text">Twitter</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="https://www.linkedin.com/in/erinesullivan1">
+                      <i class="fab fa-linkedin"></i>
+                      <span class="screen-reader-text">LinkedIn</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="https://www.instagram.com/erin_e_sullivan/">
+                      <i class="fab fa-instagram"></i>
+                      <span class="screen-reader-text">Instagram</span>
+                  </a>
+              </li>
+          </ul>
+      </div>
+  </nav>
+  
+  <main>
+      <div class="container">
+          <h1>Responsive Menu</h1>
+          <p>This responsive menu was made with just HTML and CSS.</p>
+          <p>The menu list was inspired by <a href="https://blog.rankingbyseo.com/bad-websites/">Bad Websites Examples: Top 50 Worst Websites Designs That Will Make You Cringe!</a> by <a href="https://www.rankingbyseo.com/">Ranking by SEO</a>. I'm very happy to see that <a href="http://spacejam.com/">Space Jam</a> was not on the list. It holds a special place in my heart.</p>
+      </div>
+  </main>
 </body>
 </html>
