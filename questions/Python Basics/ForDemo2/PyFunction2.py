@@ -4,12 +4,12 @@ def atomicdictionary():
 
 # Print the atomic elements
  for i in atomicelements:
-  print ("Key is ", i, "Value is ", atomicelements[i])
+  print("Key is ", i, "Value is ", atomicelements[i])
 
 
  numb = len(atomicelements)
- print ("Original Number of elements is ", numb)
- print ("Enter the new atomic element")
+ print("Original Number of elements is ", numb)
+ print("Enter the new atomic element")
  answer = "y"
 
 #Add elements into the dictionary by interacting with the user
@@ -19,9 +19,9 @@ def atomicdictionary():
   atomicelements[key] = value
   answer = input("Do you want to enter elements(y/n or Y/N):\t")
 
- print (atomicelements)
+ print(atomicelements)
 
- print ("New Number of elements is ", len(atomicelements))
+ print("New Number of elements is ", len(atomicelements))
 
 # Search for the element that the user gives
  search = " "
@@ -29,9 +29,9 @@ def atomicdictionary():
 
 
  if search in atomicelements:
-  print ("Yes element %s exists" %search)
-  print ("Its value is: %s" %atomicelements[search])
+  print("Yes element %s exists" %search)
+  print("Its value is: %s" %atomicelements[search])
  else:
-  print ("Sorry! I dont have your element")
+  print("Sorry! I dont have your element")
 
 atomicdictionary()
