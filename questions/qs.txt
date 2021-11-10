@@ -1,0 +1,13 @@
+1) What are the datatypes in py. list examples.
+2)Diff bw list and tuple
+3)Why is py list called immutable.
+4)How to define a function in py. Give example. what is significance of indentation in py
+5)Illustriate w example ???
+6) How to write for loop in py using iterator
+7) What do you mean by slicing in py ( : )
+7) What do you mean by splicing in py ( : )
+8) What is the difference between slicing and splicing
+9) Why is py called a scripting language
+- in an interpreter there is no typecasting
+10)   
+
