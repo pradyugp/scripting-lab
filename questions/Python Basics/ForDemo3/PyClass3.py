@@ -22,5 +22,6 @@ print("\nName of Person #1 is", p1.name)
 
 print("\n*** Printing after deleting p1****")
 del p1
-print("\nName of Person #1 is", p1.name) #This line will give an error!!!
+print("\nName of Person #1 is", p1.name) 
+#This line will give an error!!!
 #Error is: NameError: name 'p1' is not defined

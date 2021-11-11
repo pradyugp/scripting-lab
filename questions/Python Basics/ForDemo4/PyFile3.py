@@ -14,7 +14,6 @@ for line in escape:
 
     for word in myline:
         w = worddic.get(word,0) #0 is put into the dictionary to determine from where to count from
-        #Try this: w = worddic.get(word,100)
         print ("The word %s occurs in dictionary %d times" %(word, w))
 
         worddic[word] = w + 1
